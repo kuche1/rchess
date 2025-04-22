@@ -136,11 +136,37 @@ struct Player {
 }
 
 impl Player {
-    fn new() -> Self {
+
+    // `current_player_num` starts at 1 and ends at `max_players`
+    fn new(current_player_num: i32, max_players: i32) -> Self {
+        let max = 255 * 255 * 255;
+        let step = max / (max_players + 1);
+        let current = step * current_player_num;
+
+        let r = current / (255 * 255);
+        let current = current - r * 255 * 255;
+
+        let g = current / 255;
+        let current = current - g * 255;
+
+        let b = current;
+
         Player {
-            color: (255, 255, 255),
+            color: (r.try_into().unwrap(), g.try_into().unwrap(), b.try_into().unwrap()),
         }
+
+        // TODO
+        // this fucking sucks, I need to find a better way of assigning colors
     }
+
+    fn color_on(&self) {
+        print!("\x1b[38;2;{};{};{}m", self.color.0, self.color.1, self.color.2);
+    }
+
+    fn color_off(&self) {
+        print!("\x1b[0;0m");
+    }
+
 }
 
 //////
@@ -154,9 +180,9 @@ struct BoardPiece<'a> { // the BoardPiece's lifetime is the same as the owner's 
 
 impl BoardPiece<'_> { // or: impl<'a> BoardPiece<'a>
     fn draw(&self) {
-        // self.owner.color_on();
+        self.owner.color_on();
         self.piece.draw(); // TODO needs to also be colored in the player's color
-        // self.owner.color_off();
+        self.owner.color_off();
     }
 }
 
@@ -262,8 +288,8 @@ fn main() {
     // rook.draw();
     // println!();
 
-    let player_a = Player::new();
-    let player_b = Player::new();
+    let player_a = Player::new(1, 2);
+    let player_b = Player::new(2, 2);
 
     let board = Board::standard(&player_a, &player_b);
     board.draw();
