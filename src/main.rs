@@ -1,5 +1,9 @@
 
 
+//////
+////// pieces
+//////
+
 enum Direction {
     Forward,
     Backward,
@@ -25,6 +29,7 @@ type AllowedMoves = Vec<(Repeatable, MovePath)>;
 struct Piece {
     icon: String,
     allowed_moves_regular: AllowedMoves,
+    // TODO must also add special moves like castle and passant
 }
 
 impl Piece {
@@ -54,7 +59,7 @@ impl Piece {
         }
     }
 
-    fn bighop() -> Self {
+    fn bishop() -> Self {
         Piece {
             icon:  "♝".to_string(),
             allowed_moves_regular: vec![
@@ -120,9 +125,102 @@ impl Piece {
 
 }
 
+//////
+////// board
+//////
+
+enum Player {
+    A,
+    B,
+}
+
+struct BoardPiece {
+    piece: Piece,
+    owner: Player,
+}
+
+impl BoardPiece {
+    // fn empty() -> Self {
+    //     BoardPiece {
+    //         empty: true,
+    //         piece, 
+    //     }
+    // }
+    // fn new() -> Self {
+    //     BoardPiece { piece: (), owner: () }
+    // }
+}
+
+struct Board {
+    tiles: Vec<Vec<Option<BoardPiece>>>, // good enough for a simple game
+}
+
+impl Board {
+    fn new() -> Self {
+        Board {
+            tiles: vec![
+                vec![
+                    Some(BoardPiece{piece: Piece::rook(),   owner: Player::B}),
+                    Some(BoardPiece{piece: Piece::bishop(), owner: Player::B}),
+                    Some(BoardPiece{piece: Piece::knight(), owner: Player::B}),
+                    Some(BoardPiece{piece: Piece::king(),   owner: Player::B}),
+                    Some(BoardPiece{piece: Piece::queen(),  owner: Player::B}),
+                    Some(BoardPiece{piece: Piece::knight(), owner: Player::B}),
+                    Some(BoardPiece{piece: Piece::bishop(), owner: Player::B}),
+                    Some(BoardPiece{piece: Piece::rook(),   owner: Player::B}),
+                ],
+
+                vec![
+                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::B}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::B}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::B}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::B}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::B}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::B}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::B}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::B}),
+                ],
+
+                vec![],
+                vec![],
+                vec![],
+                vec![],
+
+                vec![
+                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::A}),
+                ],
+
+                vec![
+                    Some(BoardPiece{piece: Piece::rook(),   owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::bishop(), owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::knight(), owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::queen(),  owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::king(),   owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::knight(), owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::bishop(), owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::rook(),   owner: Player::A}),
+                ],
+            ],
+        }
+    }
+}
+
+//////
+////// main
+//////
+
 fn main() {
-    print!("Hello, rook ");
-    let rook = Piece::rook();
-    rook.draw();
-    println!();
+    // print!("Hello, rook ");
+    // let rook = Piece::rook();
+    // rook.draw();
+    // println!();
+
+    let board = Board::new();
 }
