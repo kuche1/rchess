@@ -1,7 +1,7 @@
 
 
 //////
-////// pieces
+////// piece
 //////
 
 enum Direction {
@@ -126,58 +126,73 @@ impl Piece {
 }
 
 //////
-////// board
+////// player
 //////
 
-enum Player {
-    A,
-    B,
+type Color = (u8, u8, u8);
+
+struct Player {
+    color: Color,
 }
 
-struct BoardPiece {
-    piece: Piece,
-    owner: Player,
-}
-
-impl BoardPiece {
-    fn draw(&self) {
-        self.piece.draw(); // TODO needs to also be colored in the player's color
+impl Player {
+    fn new() -> Self {
+        Player {
+            color: (255, 255, 255),
+        }
     }
 }
 
-struct Board {
-    tiles: Vec<Vec<Option<BoardPiece>>>, // good enough for a simple game
+//////
+////// board
+//////
+
+struct BoardPiece<'a> { // the BoardPiece's lifetime is the same as the owner's -> we cannot use BoardPiece if owner's memory has been freed
+    piece: Piece,
+    owner: &'a Player,
 }
 
-impl Board {
+impl BoardPiece<'_> { // or: impl<'a> BoardPiece<'a>
+    fn draw(&self) {
+        // self.owner.color_on();
+        self.piece.draw(); // TODO needs to also be colored in the player's color
+        // self.owner.color_off();
+    }
+}
+
+struct Board<'a> {
+    tiles: Vec<Vec<Option<BoardPiece<'a>>>>, // good enough for a simple game
+}
+
+impl<'a> Board<'a> {
 
     //////
     ////// constructors
     //////
 
-    fn standard() -> Self {
+    fn standard(you: &'a Player, opponent: &'a Player) -> Self { // take a look at the lifetime 'a -> Board, you, opponent
         Board {
             tiles: vec![
                 vec![
-                    Some(BoardPiece{piece: Piece::rook(),   owner: Player::B}),
-                    Some(BoardPiece{piece: Piece::knight(), owner: Player::B}),
-                    Some(BoardPiece{piece: Piece::bishop(), owner: Player::B}),
-                    Some(BoardPiece{piece: Piece::king(),   owner: Player::B}),
-                    Some(BoardPiece{piece: Piece::queen(),  owner: Player::B}),
-                    Some(BoardPiece{piece: Piece::bishop(), owner: Player::B}),
-                    Some(BoardPiece{piece: Piece::knight(), owner: Player::B}),
-                    Some(BoardPiece{piece: Piece::rook(),   owner: Player::B}),
+                    Some(BoardPiece{piece: Piece::rook(),   owner: opponent}),
+                    Some(BoardPiece{piece: Piece::knight(), owner: opponent}),
+                    Some(BoardPiece{piece: Piece::bishop(), owner: opponent}),
+                    Some(BoardPiece{piece: Piece::king(),   owner: opponent}),
+                    Some(BoardPiece{piece: Piece::queen(),  owner: opponent}),
+                    Some(BoardPiece{piece: Piece::bishop(), owner: opponent}),
+                    Some(BoardPiece{piece: Piece::knight(), owner: opponent}),
+                    Some(BoardPiece{piece: Piece::rook(),   owner: opponent}),
                 ],
 
                 vec![
-                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::B}),
-                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::B}),
-                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::B}),
-                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::B}),
-                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::B}),
-                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::B}),
-                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::B}),
-                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::B}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: opponent}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: opponent}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: opponent}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: opponent}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: opponent}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: opponent}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: opponent}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: opponent}),
                 ],
 
                 vec![None, None, None, None, None, None, None, None],
@@ -186,25 +201,25 @@ impl Board {
                 vec![None, None, None, None, None, None, None, None],
 
                 vec![
-                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::A}),
-                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::A}),
-                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::A}),
-                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::A}),
-                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::A}),
-                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::A}),
-                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::A}),
-                    Some(BoardPiece{piece: Piece::pawn(), owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: you}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: you}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: you}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: you}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: you}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: you}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: you}),
+                    Some(BoardPiece{piece: Piece::pawn(), owner: you}),
                 ],
 
                 vec![
-                    Some(BoardPiece{piece: Piece::rook(),   owner: Player::A}),
-                    Some(BoardPiece{piece: Piece::knight(), owner: Player::A}),
-                    Some(BoardPiece{piece: Piece::bishop(), owner: Player::A}),
-                    Some(BoardPiece{piece: Piece::king(),   owner: Player::A}),
-                    Some(BoardPiece{piece: Piece::queen(),  owner: Player::A}),
-                    Some(BoardPiece{piece: Piece::bishop(), owner: Player::A}),
-                    Some(BoardPiece{piece: Piece::knight(), owner: Player::A}),
-                    Some(BoardPiece{piece: Piece::rook(),   owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::rook(),   owner: you}),
+                    Some(BoardPiece{piece: Piece::knight(), owner: you}),
+                    Some(BoardPiece{piece: Piece::bishop(), owner: you}),
+                    Some(BoardPiece{piece: Piece::king(),   owner: you}),
+                    Some(BoardPiece{piece: Piece::queen(),  owner: you}),
+                    Some(BoardPiece{piece: Piece::bishop(), owner: you}),
+                    Some(BoardPiece{piece: Piece::knight(), owner: you}),
+                    Some(BoardPiece{piece: Piece::rook(),   owner: you}),
                 ],
             ],
         }
@@ -247,6 +262,9 @@ fn main() {
     // rook.draw();
     // println!();
 
-    let board = Board::standard();
+    let player_a = Player::new();
+    let player_b = Player::new();
+
+    let board = Board::standard(&player_a, &player_b);
     board.draw();
 }
