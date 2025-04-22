@@ -151,12 +151,12 @@ impl Player {
 
         let b = current;
 
+        // TODO would be better (visually) if instead we had a couple of base colors (r, g, b, r+g, g+b, r+b)
+        // we picked one of them, then we picked brightnedd
+
         Player {
             color: (r.try_into().unwrap(), g.try_into().unwrap(), b.try_into().unwrap()),
         }
-
-        // TODO
-        // this fucking sucks, I need to find a better way of assigning colors
     }
 
     fn color_on(&self) {
