@@ -1,4 +1,6 @@
 
+use std::io;
+use std::io::Write;
 
 //////
 ////// piece
@@ -152,7 +154,7 @@ impl Player {
         let b = current;
 
         // TODO would be better (visually) if instead we had a couple of base colors (r, g, b, r+g, g+b, r+b)
-        // we picked one of them, then we change the brightness
+        // we picked one of them, then we changed the brightness
         // what we have here is awesome for a lot of players, the problem is that with 1/2 and 2/2 we get bright red and dark red
 
         Player {
@@ -253,30 +255,86 @@ impl<'a> Board<'a> {
     }
 
     //////
-    ////// methods
+    ////// get piece
     //////
-    
-    fn draw(&self) {
-        for line in &self.tiles {
 
-            // for _ in 0 .. line.len()*2+1 {
-            //     print!("-");
-            // }
-            // println!();
+    fn get_piece_at(&self, x:usize, y:usize) -> &Option<BoardPiece> {
+        return &self.tiles[y][x];
+    }
 
-            print!("|");
+    //////
+    ////// draw
+    //////
 
-            for piece in line {
-                match piece {
-                    Some(piece) => piece.draw(),
-                    None => print!(" "),
-                }
-                print!("|");
+    fn draw_line(&self, line_idx: usize, show_idx: bool) -> usize {
+        if show_idx {
+            print!(" ");
+            for idx in 0 .. self.tiles[line_idx].len() {
+                print!("{} ", idx);
             }
             println!();
         }
+
+        print!("|");
+        for piece in &self.tiles[line_idx] {
+            match piece {
+                Some(piece) => piece.draw(),
+                None => print!(" "),
+            }
+            print!("|");
+        }
+        println!();
+
+        self.tiles[line_idx].len()
     }
 
+    fn draw(&self) -> usize {
+        for (line_idx, _line) in self.tiles.iter().enumerate() {
+            print!("{}", line_idx);
+            self.draw_line(line_idx, false);
+        }
+
+        self.tiles.len()
+    }
+
+}
+
+//////
+////// user input
+//////
+
+fn get_num(prompt: &str, from:usize, to:usize) -> usize {
+    loop {
+        print!("{} [{}:{}] > ", prompt, from, to);
+        io::stdout().flush().unwrap();
+
+        let mut input = String::new();
+
+        io::stdin()
+            .read_line(&mut input)
+            .unwrap();
+
+        let number = input.trim().parse::<usize>();
+
+        if let Err(_err) = number {
+            println!("not a number or invaid");
+            continue;
+        }
+
+        let number = number.unwrap();
+
+        if number < from {
+            println!("number too small");
+            continue;
+        }
+
+        if number > to {
+            println!("number too big");
+            continue;
+        }
+
+        return number;
+    }
 }
 
 //////
@@ -293,5 +351,28 @@ fn main() {
     let player_b = Player::new(2, 2);
 
     let board = Board::standard(&player_a, &player_b);
-    board.draw();
+    println!();
+    let num_lines = board.draw();
+
+    let y = get_num("select line", 0, num_lines-1);
+    println!();
+    let num_tiles = board.draw_line(y, true);
+
+    let x = get_num("select piece", 0, num_tiles-1);
+
+    let piece = board.get_piece_at(x, y);
+
+    let piece = match piece {
+        None => {
+            println!("there is no piece at that position");
+            std::process::exit(1);
+        },
+        Some(val) => val,
+    };
+
+    // if piece.owner != player_a {
+    //     println!("you don't controll that piece");
+    //     std::process::exit(1);
+    // }
+
 }
