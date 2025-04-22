@@ -137,11 +137,11 @@ struct Player {
 
 impl Player {
 
-    // `current_player_num` starts at 1 and ends at `max_players`
-    fn new(current_player_num: i32, max_players: i32) -> Self {
+    // `player_num` starts at 1 and ends at `max_players`
+    fn new(player_num: i32, max_players: i32) -> Self {
         let max = 255 * 255 * 255;
         let step = max / (max_players + 1);
-        let current = step * current_player_num;
+        let current = step * player_num;
 
         let r = current / (255 * 255);
         let current = current - r * 255 * 255;
@@ -152,7 +152,8 @@ impl Player {
         let b = current;
 
         // TODO would be better (visually) if instead we had a couple of base colors (r, g, b, r+g, g+b, r+b)
-        // we picked one of them, then we picked brightnedd
+        // we picked one of them, then we change the brightness
+        // what we have here is awesome for a lot of players, the problem is that with 1/2 and 2/2 we get bright red and dark red
 
         Player {
             color: (r.try_into().unwrap(), g.try_into().unwrap(), b.try_into().unwrap()),
