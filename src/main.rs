@@ -140,15 +140,9 @@ struct BoardPiece {
 }
 
 impl BoardPiece {
-    // fn empty() -> Self {
-    //     BoardPiece {
-    //         empty: true,
-    //         piece, 
-    //     }
-    // }
-    // fn new() -> Self {
-    //     BoardPiece { piece: (), owner: () }
-    // }
+    fn draw(&self) {
+        self.piece.draw(); // TODO needs to also be colored in the player's color
+    }
 }
 
 struct Board {
@@ -156,7 +150,12 @@ struct Board {
 }
 
 impl Board {
-    fn new() -> Self {
+
+    //////
+    ////// constructors
+    //////
+
+    fn standard() -> Self {
         Board {
             tiles: vec![
                 vec![
@@ -181,10 +180,10 @@ impl Board {
                     Some(BoardPiece{piece: Piece::pawn(), owner: Player::B}),
                 ],
 
-                vec![],
-                vec![],
-                vec![],
-                vec![],
+                vec![None, None, None, None, None, None, None, None],
+                vec![None, None, None, None, None, None, None, None],
+                vec![None, None, None, None, None, None, None, None],
+                vec![None, None, None, None, None, None, None, None],
 
                 vec![
                     Some(BoardPiece{piece: Piece::pawn(), owner: Player::A}),
@@ -201,8 +200,8 @@ impl Board {
                     Some(BoardPiece{piece: Piece::rook(),   owner: Player::A}),
                     Some(BoardPiece{piece: Piece::bishop(), owner: Player::A}),
                     Some(BoardPiece{piece: Piece::knight(), owner: Player::A}),
-                    Some(BoardPiece{piece: Piece::queen(),  owner: Player::A}),
                     Some(BoardPiece{piece: Piece::king(),   owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::queen(),  owner: Player::A}),
                     Some(BoardPiece{piece: Piece::knight(), owner: Player::A}),
                     Some(BoardPiece{piece: Piece::bishop(), owner: Player::A}),
                     Some(BoardPiece{piece: Piece::rook(),   owner: Player::A}),
@@ -210,6 +209,32 @@ impl Board {
             ],
         }
     }
+
+    //////
+    ////// methods
+    //////
+    
+    fn draw(&self) {
+        for line in &self.tiles {
+
+            // for _ in 0 .. line.len()*2+1 {
+            //     print!("-");
+            // }
+            // println!();
+
+            print!("|");
+
+            for piece in line {
+                match piece {
+                    Some(piece) => piece.draw(),
+                    None => print!(" "),
+                }
+                print!("|");
+            }
+            println!();
+        }
+    }
+
 }
 
 //////
@@ -222,5 +247,6 @@ fn main() {
     // rook.draw();
     // println!();
 
-    let board = Board::new();
+    let board = Board::standard();
+    board.draw();
 }
