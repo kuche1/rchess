@@ -160,12 +160,12 @@ impl Board {
             tiles: vec![
                 vec![
                     Some(BoardPiece{piece: Piece::rook(),   owner: Player::B}),
-                    Some(BoardPiece{piece: Piece::bishop(), owner: Player::B}),
                     Some(BoardPiece{piece: Piece::knight(), owner: Player::B}),
+                    Some(BoardPiece{piece: Piece::bishop(), owner: Player::B}),
                     Some(BoardPiece{piece: Piece::king(),   owner: Player::B}),
                     Some(BoardPiece{piece: Piece::queen(),  owner: Player::B}),
-                    Some(BoardPiece{piece: Piece::knight(), owner: Player::B}),
                     Some(BoardPiece{piece: Piece::bishop(), owner: Player::B}),
+                    Some(BoardPiece{piece: Piece::knight(), owner: Player::B}),
                     Some(BoardPiece{piece: Piece::rook(),   owner: Player::B}),
                 ],
 
@@ -198,12 +198,12 @@ impl Board {
 
                 vec![
                     Some(BoardPiece{piece: Piece::rook(),   owner: Player::A}),
-                    Some(BoardPiece{piece: Piece::bishop(), owner: Player::A}),
                     Some(BoardPiece{piece: Piece::knight(), owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::bishop(), owner: Player::A}),
                     Some(BoardPiece{piece: Piece::king(),   owner: Player::A}),
                     Some(BoardPiece{piece: Piece::queen(),  owner: Player::A}),
-                    Some(BoardPiece{piece: Piece::knight(), owner: Player::A}),
                     Some(BoardPiece{piece: Piece::bishop(), owner: Player::A}),
+                    Some(BoardPiece{piece: Piece::knight(), owner: Player::A}),
                     Some(BoardPiece{piece: Piece::rook(),   owner: Player::A}),
                 ],
             ],
