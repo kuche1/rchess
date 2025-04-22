@@ -20,11 +20,7 @@ enum Repeatable {
     Yes,
     No,
 }
-enum CanJump {
-    Yes,
-    No,
-}
-type AllowedMoves = Vec<(Repeatable, CanJump, MovePath)>;
+type AllowedMoves = Vec<(Repeatable, MovePath)>;
 
 struct Piece {
     icon: String,
@@ -41,7 +37,7 @@ impl Piece {
         Piece {
             icon:  "♟︎".to_string(),
             allowed_moves_regular: vec![
-                (Repeatable::No, CanJump::No, vec![Direction::Forward])
+                (Repeatable::No, vec![Direction::Forward])
             ],
         }
     }
@@ -50,10 +46,10 @@ impl Piece {
         Piece {
             icon:  "♞".to_string(),
             allowed_moves_regular: vec![
-                (Repeatable::No, CanJump::Yes, vec![Direction::Forward,  Direction::ForwardLeft]),
-                (Repeatable::No, CanJump::Yes, vec![Direction::Forward,  Direction::ForwardRight]),
-                (Repeatable::No, CanJump::Yes, vec![Direction::Backward, Direction::BackwardLeft]),
-                (Repeatable::No, CanJump::Yes, vec![Direction::Backward, Direction::BackwardRight]),
+                (Repeatable::No, vec![Direction::Forward,  Direction::ForwardLeft]),
+                (Repeatable::No, vec![Direction::Forward,  Direction::ForwardRight]),
+                (Repeatable::No, vec![Direction::Backward, Direction::BackwardLeft]),
+                (Repeatable::No, vec![Direction::Backward, Direction::BackwardRight]),
             ],
         }
     }
@@ -62,10 +58,10 @@ impl Piece {
         Piece {
             icon:  "♝".to_string(),
             allowed_moves_regular: vec![
-                (Repeatable::Yes, CanJump::No, vec![Direction::ForwardLeft]),
-                (Repeatable::Yes, CanJump::No, vec![Direction::ForwardRight]),
-                (Repeatable::Yes, CanJump::No, vec![Direction::BackwardLeft]),
-                (Repeatable::Yes, CanJump::No, vec![Direction::BackwardRight]),
+                (Repeatable::Yes, vec![Direction::ForwardLeft]),
+                (Repeatable::Yes, vec![Direction::ForwardRight]),
+                (Repeatable::Yes, vec![Direction::BackwardLeft]),
+                (Repeatable::Yes, vec![Direction::BackwardRight]),
             ],
         }
     }
@@ -74,10 +70,10 @@ impl Piece {
         Piece {
             icon: "♜".to_string(),
             allowed_moves_regular: vec![
-                (Repeatable::Yes, CanJump::No, vec![Direction::Forward]),
-                (Repeatable::Yes, CanJump::No, vec![Direction::Backward]),
-                (Repeatable::Yes, CanJump::No, vec![Direction::Left]),
-                (Repeatable::Yes, CanJump::No, vec![Direction::Right]),
+                (Repeatable::Yes, vec![Direction::Forward]),
+                (Repeatable::Yes, vec![Direction::Backward]),
+                (Repeatable::Yes, vec![Direction::Left]),
+                (Repeatable::Yes, vec![Direction::Right]),
             ],
         }
     }
@@ -86,14 +82,14 @@ impl Piece {
         Piece {
             icon: "♛".to_string(),
             allowed_moves_regular: vec![
-                (Repeatable::Yes, CanJump::No, vec![Direction::Forward]),
-                (Repeatable::Yes, CanJump::No, vec![Direction::Backward]),
-                (Repeatable::Yes, CanJump::No, vec![Direction::Left]),
-                (Repeatable::Yes, CanJump::No, vec![Direction::Right]),
-                (Repeatable::Yes, CanJump::No, vec![Direction::ForwardLeft]),
-                (Repeatable::Yes, CanJump::No, vec![Direction::ForwardRight]),
-                (Repeatable::Yes, CanJump::No, vec![Direction::BackwardLeft]),
-                (Repeatable::Yes, CanJump::No, vec![Direction::BackwardRight]),
+                (Repeatable::Yes, vec![Direction::Forward]),
+                (Repeatable::Yes, vec![Direction::Backward]),
+                (Repeatable::Yes, vec![Direction::Left]),
+                (Repeatable::Yes, vec![Direction::Right]),
+                (Repeatable::Yes, vec![Direction::ForwardLeft]),
+                (Repeatable::Yes, vec![Direction::ForwardRight]),
+                (Repeatable::Yes, vec![Direction::BackwardLeft]),
+                (Repeatable::Yes, vec![Direction::BackwardRight]),
             ],
         }
     }
@@ -102,14 +98,14 @@ impl Piece {
         Piece {
             icon: "♚".to_string(),
             allowed_moves_regular: vec![
-                (Repeatable::No, CanJump::No, vec![Direction::Forward]),
-                (Repeatable::No, CanJump::No, vec![Direction::Backward]),
-                (Repeatable::No, CanJump::No, vec![Direction::Left]),
-                (Repeatable::No, CanJump::No, vec![Direction::Right]),
-                (Repeatable::No, CanJump::No, vec![Direction::ForwardLeft]),
-                (Repeatable::No, CanJump::No, vec![Direction::ForwardRight]),
-                (Repeatable::No, CanJump::No, vec![Direction::BackwardLeft]),
-                (Repeatable::No, CanJump::No, vec![Direction::BackwardRight]),
+                (Repeatable::No, vec![Direction::Forward]),
+                (Repeatable::No, vec![Direction::Backward]),
+                (Repeatable::No, vec![Direction::Left]),
+                (Repeatable::No, vec![Direction::Right]),
+                (Repeatable::No, vec![Direction::ForwardLeft]),
+                (Repeatable::No, vec![Direction::ForwardRight]),
+                (Repeatable::No, vec![Direction::BackwardLeft]),
+                (Repeatable::No, vec![Direction::BackwardRight]),
             ],
         }
     }
