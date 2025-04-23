@@ -3,12 +3,14 @@ type Color = (u8, u8, u8);
 
 pub struct Player {
     color: Color,
+    pub forward_y: i32, // this is good enough for a regular chess board
+    pub backward_y: i32,
 }
 
 impl Player {
 
     // `player_num` starts at 1 and ends at `max_players`
-    pub fn new(player_num: i32, max_players: i32) -> Self {
+    pub fn new(player_num: i32, max_players: i32, forward_y: i32) -> Self {
         let max = 255 * 255 * 255;
         let step = max / (max_players + 1);
         let current = step * player_num;
@@ -27,6 +29,8 @@ impl Player {
 
         Player {
             color: (r.try_into().unwrap(), g.try_into().unwrap(), b.try_into().unwrap()),
+            forward_y: forward_y,
+            backward_y: forward_y * -1,
         }
     }
 

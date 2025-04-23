@@ -20,8 +20,8 @@ fn main() {
     // rook.draw();
     // println!();
 
-    let player_a = Player::new(1, 2);
-    let player_b = Player::new(2, 2);
+    let player_a = Player::new(1, 2, -1);
+    let player_b = Player::new(2, 2, 1);
 
     let board = Board::standard(&player_a, &player_b);
 
@@ -60,11 +60,16 @@ fn main() {
 
         board.draw();
 
-        let piece = board.select_friendly_piece(&player_a);
+        let (piece, piece_pos) = board.select_friendly_piece(&player_a);
 
         print!("piece: ");
         piece.draw();
         println!();
+
+        let available_moves = board.get_piece_available_moves(piece_pos);
+        for mvoe in available_moves { // I don't care anymore
+            println!("available move: x={} y={}", mvoe.0, mvoe.1);
+        }
 
         break;
 

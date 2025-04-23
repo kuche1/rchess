@@ -1,5 +1,5 @@
 
-enum Direction {
+pub enum Direction {
     Forward,
     Backward,
 
@@ -15,7 +15,7 @@ enum Direction {
 
 type MovePath = Vec<Direction>;
 
-enum Repeatable {
+pub enum Repeatable {
     Yes,
     No,
 }
@@ -23,7 +23,7 @@ type AllowedMoves = Vec<(Repeatable, MovePath)>;
 
 pub struct Piece {
     icon: String,
-    allowed_moves_regular: AllowedMoves,
+    pub allowed_moves_regular: AllowedMoves,
     // TODO must also add special moves like castle and passant
 }
 

@@ -1,6 +1,7 @@
 
 // this is how you import a `mod` from another `mod`
 // make sure `mod piece` is in `main.rs`
+use super::piece;
 use super::piece::Piece;
 
 use super::Player;
@@ -27,6 +28,8 @@ impl BoardPiece<'_> { // or: impl<'a> BoardPiece<'a>
         self.owner.color_off();
     }
 }
+
+type PiecePosition = (usize, usize);
 
 pub struct Board<'a> {
     tiles: Vec<Vec<Option<BoardPiece<'a>>>>, // good enough for a simple game
@@ -97,7 +100,7 @@ impl<'a> Board<'a> {
     ////// user input
     //////
 
-    pub fn select_friendly_piece(&self, player: &Player) -> &BoardPiece {
+    pub fn select_friendly_piece(&self, player: &Player) -> (&BoardPiece, PiecePosition) {
         loop {
             player.color_on();
             print!("player");
@@ -132,8 +135,90 @@ impl<'a> Board<'a> {
                 continue;
             }
 
-            return piece;
+            return (piece, (pos_x, pos_y));
         }
+    }
+
+    //////
+    ////// get piece
+    //////
+
+    // fn get_piece_at(&self, pos: PiecePosition) -> &BoardPiece {
+    //     (&self.tiles[pos.1][pos.0].unwrap()).as_ref()
+    // }
+
+    //////
+    ////// piece moves
+    //////
+
+    pub fn get_piece_available_moves(&self, pos: PiecePosition) -> Vec<PiecePosition> {
+        let (pos_x, pos_y) = pos;
+
+        // THIS IS FUCKING CANCER
+        // let pic = &(self.tiles[pos_y][pos_x]).unwrap();
+        let brummmm_brummmmmmmm = &self.tiles[pos_y];
+        let trikitrakatrikitraki = &brummmm_brummmmmmmm[pos_x];
+        let yoyoyoyoyoyoyo = &trikitrakatrikitraki.as_ref().unwrap();
+        let pic = &yoyoyoyoyoyoyo;
+
+        let mut available_positions:Vec<PiecePosition> = vec![];
+
+        // TODO ignoring `repeatable` for now
+        for (repeatable, direction) in &pic.piece.allowed_moves_regular {
+            let mut cur_pos_x: isize = pos_x.try_into().unwrap();
+            let mut cur_pos_y: isize = pos_y.try_into().unwrap();
+
+            for dir in direction {
+                match dir {
+                    piece::Direction::Forward => cur_pos_y += pic.owner.forward_y as isize,
+                    piece::Direction::Backward => cur_pos_y += pic.owner.backward_y as isize,
+                    piece::Direction::Left => cur_pos_x -= 1,
+                    piece::Direction::Right => cur_pos_x += 1,
+
+                    piece::Direction::ForwardLeft => {
+                        cur_pos_y += pic.owner.forward_y as isize;
+                        cur_pos_x -= 1;
+                    },
+                    piece::Direction::ForwardRight => {
+                        cur_pos_y += pic.owner.forward_y as isize;
+                        cur_pos_x += 1;
+                    },
+
+                    piece::Direction::BackwardLeft => {
+                        cur_pos_y += pic.owner.backward_y as isize;
+                        cur_pos_x -= 1;
+                    },
+                    piece::Direction::BackwardRight => {
+                        cur_pos_y += pic.owner.backward_y as isize;
+                        cur_pos_x += 1;
+                    },
+                }
+            }
+
+            // I fucking hate this
+            // I spent so much time on this and it still looks fucky
+            let idx_y:Option<usize> = cur_pos_y.try_into().ok();
+            let idx_x:Option<usize> = cur_pos_x.try_into().ok();
+
+            let idx_y = match idx_y {
+                None => continue,
+                Some(v) => v,
+            };
+            let idx_x = match idx_x {
+                None => continue,
+                Some(v) => v,
+            };
+
+            if let Some(pic_in_the_way) = &self.tiles[idx_y][idx_x] {
+                if pic_in_the_way.owner.same_as(pic.owner) {
+                    continue;
+                }
+            }
+
+            available_positions.push((idx_x, idx_y));
+        }
+
+        available_positions
     }
 
     //////
