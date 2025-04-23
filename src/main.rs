@@ -272,8 +272,13 @@ impl<'a> Board<'a> {
     ////// draw
     //////
 
-    fn draw_line(&self, line_idx: usize, show_idx: bool) -> usize {
+    fn draw_line(&self, line_idx: usize, show_idx: bool, pad:bool) -> usize {
         if show_idx {
+
+            if pad {
+                print!(" ");
+            }
+
             print!(" ");
             for idx in 0 .. self.tiles[line_idx].len() {
                 print!("{} ", idx);
@@ -281,6 +286,9 @@ impl<'a> Board<'a> {
             println!();
         }
 
+        if pad {
+            print!(" ");
+        }
         print!("|");
         for piece in &self.tiles[line_idx] {
             match piece {
@@ -297,7 +305,7 @@ impl<'a> Board<'a> {
     fn draw(&self) -> usize {
         for (line_idx, _line) in self.tiles.iter().enumerate() {
             print!("{}", line_idx);
-            self.draw_line(line_idx, false);
+            self.draw_line(line_idx, false, false);
         }
 
         self.tiles.len()
@@ -361,12 +369,12 @@ fn main() {
     loop {
 
         println!();
+
         let num_lines = board.draw();
-
         let pos_y = get_num("select line", 0, num_lines-1);
-        println!();
-        let num_tiles = board.draw_line(pos_y, true);
 
+        println!();
+        let num_tiles = board.draw_line(pos_y, true, true);
         let pos_x = get_num("select piece", 0, num_tiles-1);
 
         let piece = board.get_piece_at(pos_x, pos_y);
