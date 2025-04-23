@@ -105,7 +105,7 @@ impl<'a> Board<'a> {
             print!(", select a piece (example d2) > ");
             io::stdout().flush().unwrap();
 
-            let pos = match input::letter_bound_normalised__number_bound_normalised(
+            let (pos_x, pos_y) = match input::letter_bound_normalised__number_bound_normalised(
                 'a', ('a' as i32 + BOARD_WIDTH - 1) as u8 as char, 1, BOARD_HEIGHT
             ) {
                 None => {
@@ -115,7 +115,21 @@ impl<'a> Board<'a> {
                 Some(val) => val,
             };
 
-            println!("input: y={} x={}", pos.0, pos.1);
+            let pos_y = BOARD_HEIGHT as usize - 1 - pos_y;
+
+            // println!("input: y={} x={}", pos_x, pos_y);
+
+            let piece = match &self.tiles[pos_y][pos_x] {
+                None => {
+                    println!("there is no piece on that position");
+                    continue;
+                }
+                Some(v) => v,
+            };
+
+            print!("piece: ");
+            piece.draw();
+            println!();
         }
     }
 

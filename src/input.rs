@@ -44,7 +44,7 @@ fn letter_bound__number_bound(letter_from: char, letter_to: char, number_from: i
     Some((letter, number))
 }
 
-pub fn letter_bound_normalised__number_bound_normalised(letter_from: char, letter_to: char, number_from: i32, number_to: i32) -> Option<(i32, i32)> {
+pub fn letter_bound_normalised__number_bound_normalised(letter_from: char, letter_to: char, number_from: i32, number_to: i32) -> Option<(usize, usize)> {
     let (letter, number) = match letter_bound__number_bound(letter_from, letter_to, number_from, number_to) {
         None => return None,
         Some(v) => v,
@@ -53,7 +53,7 @@ pub fn letter_bound_normalised__number_bound_normalised(letter_from: char, lette
     let number = number - number_from;
     let letter = (letter as i32) - (letter_from as i32); // this fucking sucks
 
-    Some((letter, number))
+    Some((letter.try_into().unwrap(), number.try_into().unwrap()))
 }
 
 // pub fn u8(from: u8, to: u8) -> Option<u8> {
