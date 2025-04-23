@@ -59,7 +59,12 @@ fn main() {
         // println!();
 
         board.draw();
-        board.select_friendly_piece(&player_a);
+
+        let piece = board.select_friendly_piece(&player_a);
+
+        print!("piece: ");
+        piece.draw();
+        println!();
 
         break;
 

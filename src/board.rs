@@ -15,13 +15,13 @@ use std::io::Write;
 const BOARD_WIDTH: i32 = 8;
 const BOARD_HEIGHT: i32 = 8;
 
-struct BoardPiece<'a> { // the BoardPiece's lifetime is the same as the owner's -> we cannot use BoardPiece if owner's memory has been freed
+pub struct BoardPiece<'a> { // the BoardPiece's lifetime is the same as the owner's -> we cannot use BoardPiece if owner's memory has been freed
     piece: Piece,
     owner: &'a Player,
 }
 
 impl BoardPiece<'_> { // or: impl<'a> BoardPiece<'a>
-    fn draw(&self) {
+    pub fn draw(&self) {
         self.owner.color_on();
         self.piece.draw();
         self.owner.color_off();
@@ -97,7 +97,7 @@ impl<'a> Board<'a> {
     ////// user input
     //////
 
-    pub fn select_friendly_piece(&self, player: &Player) {
+    pub fn select_friendly_piece(&self, player: &Player) -> &BoardPiece {
         loop {
             player.color_on();
             print!("player");
@@ -132,9 +132,7 @@ impl<'a> Board<'a> {
                 continue;
             }
 
-            print!("piece: ");
-            piece.draw();
-            println!();
+            return piece;
         }
     }
 
