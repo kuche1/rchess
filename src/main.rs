@@ -182,6 +182,8 @@ impl Player {
 ////// board
 //////
 
+const BOARD_WIDTH: i32 = 8;
+
 struct BoardPiece<'a> { // the BoardPiece's lifetime is the same as the owner's -> we cannot use BoardPiece if owner's memory has been freed
     piece: Piece,
     owner: &'a Player,
@@ -272,20 +274,7 @@ impl<'a> Board<'a> {
     ////// draw
     //////
 
-    fn draw_line(&self, line_idx: usize, show_idx: bool, pad:bool) -> usize {
-        if show_idx {
-
-            if pad {
-                print!(" ");
-            }
-
-            print!(" ");
-            for idx in 0 .. self.tiles[line_idx].len() {
-                print!("{} ", idx);
-            }
-            println!();
-        }
-
+    fn draw_line(&self, line_idx: usize, pad:bool) -> usize { // TODO this needs to go
         if pad {
             print!(" ");
         }
@@ -297,18 +286,30 @@ impl<'a> Board<'a> {
             }
             print!("|");
         }
-        println!();
 
         self.tiles[line_idx].len()
     }
 
-    fn draw(&self) -> usize {
+    fn draw(&self) {
+        print!(" |");
+        for idx in 0..BOARD_WIDTH {
+            print!("{}|", char::from_u32( ('a' as i32 + idx) as u32 ).unwrap());
+        }
+        println!();
+
+        let len = self.tiles.len();
         for (line_idx, _line) in self.tiles.iter().enumerate() {
-            print!("{}", line_idx);
-            self.draw_line(line_idx, false, false);
+            let line_ui_num = len - line_idx;
+            print!("{}", line_ui_num);
+            self.draw_line(line_idx, false);
+            println!("{}", line_ui_num);
         }
 
-        self.tiles.len()
+        print!(" |");
+        for idx in 0..BOARD_WIDTH {
+            print!("{}|", char::from_u32( ('a' as i32 + idx) as u32 ).unwrap());
+        }
+        println!();
     }
 
 }
@@ -368,35 +369,38 @@ fn main() {
 
     loop {
 
-        println!();
+        // println!();
 
-        let num_lines = board.draw();
-        let pos_y = get_num("select line", 0, num_lines-1);
+        // let num_lines = board.draw();
+        // let pos_y = get_num("select line", 0, num_lines-1);
 
-        println!();
-        let num_tiles = board.draw_line(pos_y, true, true);
-        let pos_x = get_num("select piece", 0, num_tiles-1);
+        // println!();
+        // let num_tiles = board.draw_line(pos_y, true);
+        // println!();
+        // let pos_x = get_num("select piece", 0, num_tiles-1);
 
-        let piece = board.get_piece_at(pos_x, pos_y);
+        // let piece = board.get_piece_at(pos_x, pos_y);
 
-        let piece = match piece {
-            None => {
-                println!("there is no piece at that position");
-                // std::process::exit(1);
-                continue;
-            },
-            Some(val) => val,
-        };
+        // let piece = match piece {
+        //     None => {
+        //         println!("there is no piece at that position");
+        //         // std::process::exit(1);
+        //         continue;
+        //     },
+        //     Some(val) => val,
+        // };
 
-        if !piece.owner.same_as(&player_a) {
-            println!("you don't own that piece");
-            continue;
-        }
+        // if !piece.owner.same_as(&player_a) {
+        //     println!("you don't own that piece");
+        //     continue;
+        // }
 
-        println!();
-        print!("yay you will move the ");
-        piece.draw();
-        println!();
+        // println!();
+        // print!("yay you will move the ");
+        // piece.draw();
+        // println!();
+
+        board.draw();
 
         break;
 
