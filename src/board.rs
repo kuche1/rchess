@@ -127,6 +127,11 @@ impl<'a> Board<'a> {
                 Some(v) => v,
             };
 
+            if !piece.owner.same_as(player) {
+                println!("you don't own that piece");
+                continue;
+            }
+
             print!("piece: ");
             piece.draw();
             println!();

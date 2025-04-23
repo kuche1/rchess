@@ -38,10 +38,10 @@ impl Player {
         print!("\x1b[0;0m");
     }
 
-    // fn same_as(&self, other: &Player) -> bool {
-    //     return self.color == other.color;
-    //     // using the color as an identificator is now awesome (however it will be OK as long as we keep using the "spectrum" color generator, or anything that doesn't repear colors)
-    //     // also, there should be a better way to do this
-    // }
+    pub fn same_as(&self, other: &Player) -> bool {
+        return self.color == other.color;
+        // using the color as an identificator is now awesome (however it will be OK as long as we keep using the "spectrum" color generator, or anything that doesn't repear colors)
+        // also, there should be a better way to do this
+    }
 
 }
