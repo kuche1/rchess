@@ -1,6 +1,6 @@
 
-use std::io;
-use std::io::Write;
+// globally disable warnings about non-snake names
+#![allow(non_snake_case)]
 
 // if this is not here we will not be able to import it from other `mod`s
 mod piece;
@@ -12,47 +12,7 @@ use player::Player;
 mod board;
 use board::Board;
 
-//////
-////// user input
-//////
-
-fn get_num(prompt: &str, from:usize, to:usize) -> usize {
-    loop {
-        print!("{} [{}:{}] > ", prompt, from, to);
-        io::stdout().flush().unwrap();
-
-        let mut input = String::new();
-
-        io::stdin()
-            .read_line(&mut input)
-            .unwrap();
-
-        let number = input.trim().parse::<usize>();
-
-        if let Err(_err) = number {
-            println!("not a number or invaid");
-            continue;
-        }
-
-        let number = number.unwrap();
-
-        if number < from {
-            println!("number too small");
-            continue;
-        }
-
-        if number > to {
-            println!("number too big");
-            continue;
-        }
-
-        return number;
-    }
-}
-
-//////
-////// main
-//////
+mod input;
 
 fn main() {
     // print!("Hello, rook ");
@@ -99,6 +59,7 @@ fn main() {
         // println!();
 
         board.draw();
+        board.select_friendly_piece(&player_a);
 
         break;
 

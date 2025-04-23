@@ -4,8 +4,16 @@
 use super::piece::Piece;
 
 use super::Player;
+// wtf, this is a typo and yet it works
+// perhaps `super` means "get it from `main.rs`"
+
+use super::input;
+
+use std::io;
+use std::io::Write;
 
 const BOARD_WIDTH: i32 = 8;
+const BOARD_HEIGHT: i32 = 8;
 
 struct BoardPiece<'a> { // the BoardPiece's lifetime is the same as the owner's -> we cannot use BoardPiece if owner's memory has been freed
     piece: Piece,
@@ -86,12 +94,30 @@ impl<'a> Board<'a> {
     }
 
     //////
-    ////// get piece
+    ////// user input
     //////
 
-    // fn get_piece_at(&self, x:usize, y:usize) -> &Option<BoardPiece> {
-    //     return &self.tiles[y][x];
-    // }
+    pub fn select_friendly_piece(&self, player: &Player) {
+        loop {
+            player.color_on();
+            print!("player");
+            player.color_off();
+            print!(", select a piece (example d2) > ");
+            io::stdout().flush().unwrap();
+
+            let pos = match input::letter_bound_normalised__number_bound_normalised(
+                'a', ('a' as i32 + BOARD_WIDTH - 1) as u8 as char, 1, BOARD_HEIGHT
+            ) {
+                None => {
+                    println!("invalid input");
+                    continue;
+                }
+                Some(val) => val,
+            };
+
+            println!("input: y={} x={}", pos.0, pos.1);
+        }
+    }
 
     //////
     ////// draw
