@@ -75,13 +75,15 @@ fn main() {
             continue;
         }
 
-        for mvoe in &available_moves { // I don't care anymore
-            println!("available move: x={} y={}", mvoe.0, mvoe.1);
-        }
+        // for mvoe in &available_moves { // I don't care anymore
+        //     println!("available move: x={} y={}", mvoe.0, mvoe.1);
+        // }
 
-        assert!(available_moves.len() == 1);
+        // assert!(available_moves.len() == 1);
 
-        board.move_piece(piece_pos, available_moves[0]);
+        let selected_move = board.select_move(available_moves);
+
+        board.move_piece(piece_pos, selected_move);
     }
 
 }

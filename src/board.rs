@@ -29,7 +29,9 @@ impl BoardPiece<'_> { // or: impl<'a> BoardPiece<'a>
     }
 }
 
-type PiecePosition = (usize, usize);
+type PiecePositionX = usize;
+type PiecePositionY = usize;
+type PiecePosition = (PiecePositionX, PiecePositionY);
 
 pub struct Board<'a> {
     tiles: Vec<Vec<Option<BoardPiece<'a>>>>, // good enough for a simple game
@@ -97,6 +99,59 @@ impl<'a> Board<'a> {
     }
 
     //////
+    ////// user output
+    //////
+
+    fn draw_line(&self, line_idx: usize, pad:bool) -> usize { // TODO this needs to go
+        if pad {
+            print!(" ");
+        }
+        print!("|");
+        for piece in &self.tiles[line_idx] {
+            match piece {
+                Some(piece) => piece.draw(),
+                None => print!(" "),
+            }
+            print!("|");
+        }
+
+        self.tiles[line_idx].len()
+    }
+
+    pub fn draw(&self) {
+        print!(" |");
+        for idx in 0..BOARD_WIDTH {
+            print!("{}|", char::from_u32( ('a' as i32 + idx) as u32 ).unwrap());
+        }
+        println!();
+
+        let len = self.tiles.len();
+        for (line_idx, _line) in self.tiles.iter().enumerate() {
+            let line_ui_num = len - line_idx;
+            print!("{}", line_ui_num);
+            self.draw_line(line_idx, false);
+            println!("{}", line_ui_num);
+        }
+
+        print!(" |");
+        for idx in 0..BOARD_WIDTH {
+            print!("{}|", char::from_u32( ('a' as i32 + idx) as u32 ).unwrap());
+        }
+        println!();
+    }
+
+    fn print_PiecePosition(&self, pos: PiecePosition) {
+        let (x, y) = pos;
+
+        let x = x as u8 + 'a' as u8;
+        let x = x as char;
+
+        let y = BOARD_HEIGHT - y as i32;
+
+        print!("{}{}", x, y);
+    }
+
+    //////
     ////// user input
     //////
 
@@ -137,6 +192,18 @@ impl<'a> Board<'a> {
 
             return (piece, (pos_x, pos_y));
         }
+    }
+
+    pub fn select_move(&self, moves: Vec<PiecePosition>) -> PiecePosition {
+        print!("select a target position, possible choices:");
+
+        for possible_move in moves {
+            print!(" ");
+            self.print_PiecePosition(possible_move);
+        }
+        println!();
+
+        (0,0) // TODO this is fucking unfinished
     }
 
     //////
@@ -228,48 +295,8 @@ impl<'a> Board<'a> {
         // no safety checks
         self.tiles[to.1][to.0] = self.tiles[from.1][from.0].take(); // this is how you reassign vector element
         self.tiles[from.1][from.0] = None;
-    }
 
-    //////
-    ////// draw
-    //////
-
-    fn draw_line(&self, line_idx: usize, pad:bool) -> usize { // TODO this needs to go
-        if pad {
-            print!(" ");
-        }
-        print!("|");
-        for piece in &self.tiles[line_idx] {
-            match piece {
-                Some(piece) => piece.draw(),
-                None => print!(" "),
-            }
-            print!("|");
-        }
-
-        self.tiles[line_idx].len()
-    }
-
-    pub fn draw(&self) {
-        print!(" |");
-        for idx in 0..BOARD_WIDTH {
-            print!("{}|", char::from_u32( ('a' as i32 + idx) as u32 ).unwrap());
-        }
-        println!();
-
-        let len = self.tiles.len();
-        for (line_idx, _line) in self.tiles.iter().enumerate() {
-            let line_ui_num = len - line_idx;
-            print!("{}", line_ui_num);
-            self.draw_line(line_idx, false);
-            println!("{}", line_ui_num);
-        }
-
-        print!(" |");
-        for idx in 0..BOARD_WIDTH {
-            print!("{}|", char::from_u32( ('a' as i32 + idx) as u32 ).unwrap());
-        }
-        println!();
+        // TODO evaluate win condition (keep custom gamemodes in mind)
     }
 
 }

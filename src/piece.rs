@@ -22,8 +22,8 @@ pub enum Repeatable {
 type AllowedMoves = Vec<(Repeatable, MovePath)>;
 
 pub struct Piece {
-    icon: String,
-    pub allowed_moves_regular: AllowedMoves,
+    icon: &'static str,
+    pub allowed_moves_regular: AllowedMoves, // TODO let's not kid ourselves, no one is going to want to play with pieces other than the default ones
     // TODO must also add special moves like castle and passant
 }
 
@@ -35,7 +35,7 @@ impl Piece {
 
     pub fn pawn() -> Self {
         Piece {
-            icon:  "♟︎".to_string(),
+            icon:  "♟︎",
             allowed_moves_regular: vec![
                 (Repeatable::No, vec![Direction::Forward])
             ],
@@ -44,7 +44,7 @@ impl Piece {
 
     pub fn knight() -> Self {
         Piece {
-            icon:  "♞".to_string(),
+            icon:  "♞",
             allowed_moves_regular: vec![
                 (Repeatable::No, vec![Direction::Forward,  Direction::ForwardLeft]),
                 (Repeatable::No, vec![Direction::Forward,  Direction::ForwardRight]),
@@ -56,7 +56,7 @@ impl Piece {
 
     pub fn bishop() -> Self {
         Piece {
-            icon:  "♝".to_string(),
+            icon:  "♝",
             allowed_moves_regular: vec![
                 (Repeatable::Yes, vec![Direction::ForwardLeft]),
                 (Repeatable::Yes, vec![Direction::ForwardRight]),
@@ -68,7 +68,7 @@ impl Piece {
 
     pub fn rook() -> Self {
         Piece {
-            icon: "♜".to_string(),
+            icon: "♜",
             allowed_moves_regular: vec![
                 (Repeatable::Yes, vec![Direction::Forward]),
                 (Repeatable::Yes, vec![Direction::Backward]),
@@ -80,7 +80,7 @@ impl Piece {
 
     pub fn queen() -> Self {
         Piece {
-            icon: "♛".to_string(),
+            icon: "♛",
             allowed_moves_regular: vec![
                 (Repeatable::Yes, vec![Direction::Forward]),
                 (Repeatable::Yes, vec![Direction::Backward]),
@@ -96,7 +96,7 @@ impl Piece {
 
     pub fn king() -> Self {
         Piece {
-            icon: "♚".to_string(),
+            icon: "♚",
             allowed_moves_regular: vec![
                 (Repeatable::No, vec![Direction::Forward]),
                 (Repeatable::No, vec![Direction::Backward]),

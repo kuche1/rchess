@@ -1,6 +1,10 @@
 
 use std::io;
 
+////////
+//////// two letters - related
+////////
+
 fn two_letters() -> Option<(char, char)> {
     let mut input = String::new();
 
@@ -55,6 +59,16 @@ pub fn letter_bound_normalised__number_bound_normalised(letter_from: char, lette
 
     Some((letter.try_into().unwrap(), number.try_into().unwrap()))
 }
+
+////////
+//////// pick a choice
+////////
+
+// pub fn choice(choices: Vec<)
+
+////////
+//////// old code
+////////
 
 // pub fn u8(from: u8, to: u8) -> Option<u8> {
 //     let mut input = String::new();
