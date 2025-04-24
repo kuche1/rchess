@@ -140,15 +140,7 @@ impl<'a> Board<'a> {
     }
 
     //////
-    ////// get piece
-    //////
-
-    // fn get_piece_at(&self, pos: PiecePosition) -> &BoardPiece {
-    //     (&self.tiles[pos.1][pos.0].unwrap()).as_ref()
-    // }
-
-    //////
-    ////// piece moves
+    ////// get piece moves
     //////
 
     pub fn get_piece_available_moves(&self, pos: PiecePosition) -> Vec<PiecePosition> {
@@ -195,6 +187,13 @@ impl<'a> Board<'a> {
                 }
             }
 
+            if (cur_pos_x < 0) || (cur_pos_y < 0) {
+                continue;
+            }
+            if (cur_pos_x >= BOARD_WIDTH.try_into().unwrap()) || (cur_pos_y >= BOARD_HEIGHT.try_into().unwrap()) {
+                continue;
+            }
+
             // I fucking hate this
             // I spent so much time on this and it still looks fucky
             let idx_y:Option<usize> = cur_pos_y.try_into().ok();
@@ -219,6 +218,16 @@ impl<'a> Board<'a> {
         }
 
         available_positions
+    }
+
+    //////
+    ////// move piece
+    //////
+
+    pub fn move_piece(&mut self, from: PiecePosition, to: PiecePosition) {
+        // no safety checks
+        self.tiles[to.1][to.0] = self.tiles[from.1][from.0].take(); // this is how you reassign vector element
+        self.tiles[from.1][from.0] = None;
     }
 
     //////

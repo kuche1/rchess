@@ -23,7 +23,7 @@ fn main() {
     let player_a = Player::new(1, 2, -1);
     let player_b = Player::new(2, 2, 1);
 
-    let board = Board::standard(&player_a, &player_b);
+    let mut board = Board::standard(&player_a, &player_b);
 
     loop {
 
@@ -62,17 +62,26 @@ fn main() {
 
         let (piece, piece_pos) = board.select_friendly_piece(&player_a);
 
-        print!("piece: ");
+        print!("selected piece: ");
         piece.draw();
         println!();
 
         let available_moves = board.get_piece_available_moves(piece_pos);
-        for mvoe in available_moves { // I don't care anymore
+
+        if available_moves.len() == 0 {
+            print!("there are no moves available for: ");
+            piece.draw();
+            println!();
+            continue;
+        }
+
+        for mvoe in &available_moves { // I don't care anymore
             println!("available move: x={} y={}", mvoe.0, mvoe.1);
         }
 
-        break;
+        assert!(available_moves.len() == 1);
 
+        board.move_piece(piece_pos, available_moves[0]);
     }
 
 }
